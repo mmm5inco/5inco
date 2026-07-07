@@ -10,6 +10,7 @@ export default function RegistroNegocio() {
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [ubicacion, setUbicacion] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -19,6 +20,17 @@ export default function RegistroNegocio() {
     setLoading(true);
     setError('');
     setSuccess('');
+
+    if (!email || !password || !nombre) {
+      setError('Por favor completa todos los campos.');
+      setLoading(false);
+      return;
+    }
+    if (!acceptedTerms) {
+      setError('Debes aceptar los Términos y Condiciones para registrarte.');
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
 
@@ -114,6 +126,19 @@ export default function RegistroNegocio() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+            <input 
+              type="checkbox" 
+              id="terms" 
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              required
+            />
+            <label htmlFor="terms" style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+              Acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" className="text-accent">Términos y Condiciones</a>
+            </label>
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '16px' }}>

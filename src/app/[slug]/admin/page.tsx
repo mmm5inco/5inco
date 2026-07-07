@@ -437,7 +437,7 @@ export default function AdminDashboard() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', marginTop: '16px' }}>
           <label style={{ fontSize: '0.9rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={acceptedTerms} onChange={e => setAcceptedTerms(e.target.checked)} style={{ marginRight: '8px' }}/>
-            Acepto los <a href="#" style={{ color: '#009ee3' }}>Términos y Condiciones</a> del servicio SaaS.
+            Acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#009ee3' }}>Términos y Condiciones</a> del servicio SaaS.
           </label>
           <button onClick={handlePayment} disabled={isProcessingPayment} style={{ background: '#009ee3', color: '#fff', padding: '16px 32px', borderRadius: '8px', border: 'none', fontSize: '1.1rem', fontWeight: 'bold', cursor: isProcessingPayment ? 'not-allowed' : 'pointer', opacity: isProcessingPayment ? 0.7 : 1 }}>
             {isProcessingPayment ? 'Conectando...' : 'Pagar Suscripción ($45.000 ARS/mes)'}
@@ -470,7 +470,7 @@ export default function AdminDashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
               <label style={{ fontSize: '0.9rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <input type="checkbox" checked={acceptedTerms} onChange={e => setAcceptedTerms(e.target.checked)} style={{ marginRight: '8px' }}/>
-                Acepto los <a href="#" style={{ color: '#009ee3' }}>Términos y Condiciones</a>
+                Acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#009ee3' }}>Términos y Condiciones</a>
               </label>
               <button onClick={handlePayment} disabled={isProcessingPayment} style={{ background: '#009ee3', color: '#fff', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: isProcessingPayment ? 'not-allowed' : 'pointer', width: 'fit-content', opacity: isProcessingPayment ? 0.7 : 1 }}>
                 {isProcessingPayment ? 'Conectando...' : 'Suscribirse ($45.000 ARS/mes)'}
