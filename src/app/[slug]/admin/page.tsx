@@ -15,7 +15,7 @@ const WhatsAppConnection = ({ slug }: { slug: string }) => {
     
     const fetchStatus = async () => {
       try {
-        const { data, error } = await supabase.from('whatsapp_sesiones').select('status, qr_code').eq('slug', slug).single();
+        const { data, error } = await supabase.from('whatsapp_sesiones').select('status, qr_code').eq('slug', slug).maybeSingle();
         if (error) {
           if (isMounted) setStatus('error');
           return;
@@ -23,6 +23,8 @@ const WhatsAppConnection = ({ slug }: { slug: string }) => {
         if (data && isMounted) {
           setStatus(data.status);
           setQr(data.qr_code);
+        } else if (!data && isMounted) {
+          setStatus('disconnected');
         }
       } catch (err) {
         if (isMounted) setStatus('error');
@@ -56,9 +58,9 @@ const WhatsAppConnection = ({ slug }: { slug: string }) => {
   if (status === 'error') {
     return (
       <div className="flex-col gap-sm flex-center text-center">
-        <span style={{ fontSize: '2rem' }}>⚠️</span>
-        <p style={{ color: 'var(--text-primary)' }}>No se pudo conectar al servidor local.</p>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Asegúrate de ejecutar <code>node whatsapp-server.js</code> en otra terminal.</p>
+        <span style={{ fontSize: '2rem' }}>🔌</span>
+        <p style={{ color: 'var(--text-primary)', margin: 0 }}>Motor de WhatsApp Apagado</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Asegúrate de ejecutar <code>node whatsapp-server.js</code> en tu computadora.</p>
       </div>
     );
   }
