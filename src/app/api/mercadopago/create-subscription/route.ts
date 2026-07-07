@@ -50,6 +50,7 @@ export async function POST(request: Request) {
         pending: `${baseUrl}/${slug}/admin`
       },
       auto_return: 'approved',
+      notification_url: 'https://5inco.com.ar/api/mercadopago/webhook',
       external_reference: localId, // Identificador de nuestro supermercado
     };
 
