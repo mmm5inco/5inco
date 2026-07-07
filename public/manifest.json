@@ -1,0 +1,16 @@
+{
+  "name": "5inco - Filas Digitales",
+  "short_name": "5inco",
+  "description": "Aplicación para eliminar las colas en locales físicos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

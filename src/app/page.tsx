@@ -1,66 +1,60 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="flex-col gap-xl" style={{ minHeight: 'calc(100vh - 48px)', justifyContent: 'center' }}>
+      
+      {/* Header */}
+      <div className="flex-col gap-sm" style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: '3rem' }}>
+          5<span className="text-gradient">inco</span>
+        </h1>
+        <p className="text-muted" style={{ fontSize: '1.1rem' }}>
+          El fin de las filas físicas
+        </p>
+      </div>
+
+      {/* Main Actions */}
+      <div className="flex-col gap-md">
+        
+        <div className="glass-card flex-col gap-sm" style={{ border: '1px solid var(--accent-primary)' }}>
+          <div className="flex-between">
+            <span style={{ fontSize: '2rem' }}>🏢</span>
+            <span className="text-accent" style={{ fontWeight: 600 }}>Para Comercios</span>
+          </div>
+          <h3>¿Tienes un local?</h3>
+          <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+            Únete a 5inco y elimina las colas en tus cajas. Gestiona turnos, agrega publicidad y fideliza clientes.
           </p>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+            <a href="/registro-negocio" className="btn-primary" style={{ flex: 1 }}>
+              Registrarme como negocio
+            </a>
+            <a href="/login-negocio" className="btn-secondary">
+              Ingresar
+            </a>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+
+        <div className="glass-card flex-col gap-sm">
+          <div className="flex-between">
+            <span style={{ fontSize: '2rem' }}>🛒</span>
+            <span style={{ fontWeight: 600 }}>Para Clientes</span>
+          </div>
+          <h3>Demo Cliente</h3>
+          <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+            Escanea un QR para pedir turno en un local y sigue comprando.
+          </p>
+          <a href="/demo-local" className="btn-secondary" style={{ marginTop: '8px' }}>
+            Ver Vista Cliente
           </a>
         </div>
-      </main>
+
+      </div>
+      
+      <div style={{ textAlign: 'center', marginTop: 'auto', paddingTop: '24px' }}>
+        <p className="text-muted" style={{ fontSize: '0.8rem' }}>
+          Plataforma de Turnos Inteligentes
+        </p>
+      </div>
     </div>
   );
 }
