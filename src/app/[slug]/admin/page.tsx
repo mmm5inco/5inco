@@ -702,32 +702,34 @@ export default function AdminDashboard() {
           
           <div className="flex-col gap-sm" style={{ marginTop: '8px' }}>
             {anuncios.map(anuncio => (
-              <div key={anuncio.id} className="flex-between" style={{ padding: '8px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-glass)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-                  <div style={{ width: '80px', height: '50px', backgroundImage: `url(${anuncio.image})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '4px', border: '1px solid var(--border-glass)' }}></div>
-                  <div className="flex-col gap-sm" style={{ flex: 1, paddingRight: '12px' }}>
-                    <input 
-                      type="text" 
-                      placeholder="Título de la promoción..." 
-                      value={anuncio.title}
-                      onChange={(e) => setAnuncios(anuncios.map(a => a.id === anuncio.id ? { ...a, title: e.target.value } : a))}
-                      style={{ width: '100%', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-primary)', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: '4px', padding: '4px' }}
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="Descripción corta..." 
-                      value={anuncio.desc}
-                      onChange={(e) => setAnuncios(anuncios.map(a => a.id === anuncio.id ? { ...a, desc: e.target.value } : a))}
-                      style={{ width: '100%', fontSize: '0.8rem', color: 'var(--text-primary)', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: '4px', padding: '4px' }}
-                    />
-                  </div>
-                </div>
+              <div key={anuncio.id} className="flex-col gap-md" style={{ padding: '16px', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-glass)', position: 'relative' }}>
                 <button 
                   onClick={() => setAnuncios(anuncios.filter(a => a.id !== anuncio.id))} 
-                  style={{ padding: '4px 8px', fontSize: '0.8rem', color: '#ef4444', background: 'transparent', border: '1px solid #ef4444', borderRadius: '4px', cursor: 'pointer' }}
+                  style={{ position: 'absolute', top: '16px', right: '16px', padding: '6px 12px', fontSize: '0.8rem', color: '#fff', background: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                 >
-                  Eliminar
+                  Eliminar Banner
                 </button>
+                
+                <div style={{ width: '100%', height: '150px', backgroundImage: `url(${anuncio.image})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '8px', border: '1px solid var(--border-glass)' }}></div>
+                
+                <div className="flex-col gap-sm" style={{ width: '100%' }}>
+                  <label style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Título de la Oferta / Promoción</label>
+                  <input 
+                    type="text" 
+                    placeholder="Ej: Descuento en frutas..." 
+                    value={anuncio.title}
+                    onChange={(e) => setAnuncios(anuncios.map(a => a.id === anuncio.id ? { ...a, title: e.target.value } : a))}
+                    style={{ width: '100%', fontSize: '1rem', fontWeight: 'bold', color: 'var(--text-primary)', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: '6px', padding: '10px' }}
+                  />
+                  
+                  <label style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Descripción Corta (Condiciones o detalles)</label>
+                  <textarea 
+                    placeholder="Ej: 20% de descuento todos los jueves pagando con efectivo..." 
+                    value={anuncio.desc}
+                    onChange={(e) => setAnuncios(anuncios.map(a => a.id === anuncio.id ? { ...a, desc: e.target.value } : a))}
+                    style={{ width: '100%', fontSize: '0.9rem', color: 'var(--text-primary)', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: '6px', padding: '10px', minHeight: '80px', resize: 'vertical' }}
+                  />
+                </div>
               </div>
             ))}
           </div>
