@@ -12,8 +12,29 @@ export async function POST(request: Request) {
     const action = url.searchParams.get('action') || url.searchParams.get('type');
     const dataId = url.searchParams.get('data.id') || url.searchParams.get('id');
     
-    // Si la acción es "payment", procesamos el pago
-    if ((action === 'payment' || url.searchParams.get('topic') === 'payment') && dataId) {
+    // Manejar Suscripciones (PreApprovalPlan)
+    if (action === 'subscription_preapproval' && dataId) {
+      const client = new (require('mercadopago').MercadoPagoConfig)({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN });
+      const preApproval = new (require('mercadopago').PreApproval)(client);
+      
+      const subscription = await preApproval.get({ id: dataId });
+      
+      if (subscription) {
+        // external_reference tiene el ID de nuestro local
+        const localId = subscription.external_reference;
+        const status = subscription.status; // 'authorized', 'cancelled', 'paused', etc.
+        
+        if (localId) {
+          if (status === 'authorized') {
+            await supabase.from('locales').update({ estado_suscripcion: 'activa' }).eq('id', localId);
+          } else if (status === 'cancelled' || status === 'paused') {
+            await supabase.from('locales').update({ estado_suscripcion: 'vencida' }).eq('id', localId);
+          }
+        }
+      }
+    }
+    // Manejar Pagos Únicos (Preference) si quedó alguno huérfano o si se vuelve a usar
+    else if ((action === 'payment' || url.searchParams.get('topic') === 'payment') && dataId) {
       
       const client = new (require('mercadopago').MercadoPagoConfig)({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN });
       const payment = new (require('mercadopago').Payment)(client);
@@ -21,24 +42,14 @@ export async function POST(request: Request) {
       const paymentData = await payment.get({ id: dataId });
       
       if (paymentData) {
-        // external_reference tiene el ID de nuestro local (lo seteamos en la creación de la preferencia)
         const localId = paymentData.external_reference;
         const status = paymentData.status; // 'approved', 'rejected', 'in_process', etc.
         
         if (localId) {
-          // Si el pago está aprobado
           if (status === 'approved') {
-            await supabase
-              .from('locales')
-              .update({ estado_suscripcion: 'activa' })
-              .eq('id', localId);
-          } 
-          // Si fue rechazado
-          else if (status === 'rejected' || status === 'cancelled' || status === 'refunded') {
-            await supabase
-              .from('locales')
-              .update({ estado_suscripcion: 'vencida' })
-              .eq('id', localId);
+            await supabase.from('locales').update({ estado_suscripcion: 'activa' }).eq('id', localId);
+          } else if (status === 'rejected' || status === 'cancelled' || status === 'refunded') {
+            await supabase.from('locales').update({ estado_suscripcion: 'vencida' }).eq('id', localId);
           }
         }
       }

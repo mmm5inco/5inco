@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Preference, MercadoPagoConfig } from 'mercadopago';
+import { PreApprovalPlan, MercadoPagoConfig } from 'mercadopago';
 import { createClient } from '@/utils/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
@@ -27,35 +27,26 @@ export async function POST(request: Request) {
 
     // 2. Inicializar MercadoPago con el token del CEO
     const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN });
-    const preference = new Preference(client);
+    const preApprovalPlan = new PreApprovalPlan(client);
 
-    // 3. Crear el plan de pago (Preference en lugar de Preapproval para evitar error 500)
-    // El 'external_reference' es VITAL: es lo que nos dirá QUÉ local pagó cuando el webhook escuche.
+    // 3. Crear el plan de suscripción recurrente
     const origin = request.headers.get('origin') || request.headers.get('referer');
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || origin || 'https://5inco.com.ar';
     
     const body = {
-      items: [
-        {
-          id: 'suscripcion_mensual',
-          title: 'Suscripción Mensual - 5inco SaaS',
-          quantity: 1,
-          unit_price: 45000,
-          currency_id: 'ARS'
-        }
-      ],
-      back_urls: {
-        success: `${baseUrl}/${slug}/admin`,
-        failure: `${baseUrl}/${slug}/admin`,
-        pending: `${baseUrl}/${slug}/admin`
+      reason: 'Suscripción Mensual - 5inco SaaS',
+      auto_recurring: {
+        frequency: 1,
+        frequency_type: 'months',
+        transaction_amount: 45000,
+        currency_id: 'ARS'
       },
-      auto_return: 'approved',
-      notification_url: 'https://5inco.com.ar/api/mercadopago/webhook',
+      back_url: `${baseUrl}/${slug}/admin`,
       external_reference: localId, // Identificador de nuestro supermercado
     };
 
-    // @ts-ignore (evitamos error de tipado estricto si lo hay)
-    const response = await preference.create({ body });
+    // @ts-ignore
+    const response = await preApprovalPlan.create({ body });
 
     // Guardar temporalmente el ID de la preferencia generada en la BD (opcional)
     if (response.id) {
