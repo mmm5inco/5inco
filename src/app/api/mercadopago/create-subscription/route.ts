@@ -20,13 +20,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
+    if (!process.env.MERCADOPAGO_ACCESS_TOKEN) {
+      console.error('Falta MERCADOPAGO_ACCESS_TOKEN en las variables de entorno de Vercel');
+      return NextResponse.json({ error: 'Error de configuración: Falta Token de MercadoPago en el servidor' }, { status: 500 });
+    }
+
     // 2. Inicializar MercadoPago con el token del CEO
-    const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
+    const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN });
     const preference = new Preference(client);
 
     // 3. Crear el plan de pago (Preference en lugar de Preapproval para evitar error 500)
     // El 'external_reference' es VITAL: es lo que nos dirá QUÉ local pagó cuando el webhook escuche.
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const origin = request.headers.get('origin') || request.headers.get('referer');
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || origin || 'https://5inco.com.ar';
     
     const body = {
       items: [
@@ -63,6 +69,9 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error('Error generando link de MercadoPago:', error);
-    return NextResponse.json({ error: error.message || 'Error generando suscripción' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Error generando link de pago',
+      details: error.message || String(error)
+    }, { status: 500 });
   }
 }

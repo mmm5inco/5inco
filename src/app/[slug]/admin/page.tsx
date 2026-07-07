@@ -249,7 +249,7 @@ export default function AdminDashboard() {
       if (data.init_point) {
         window.location.href = data.init_point;
       } else {
-        alert('Error al conectar con MercadoPago.');
+        alert('Detalle del error: ' + (data.details || data.error || 'Error desconocido al conectar con MercadoPago.'));
       }
     } catch (e) {
       alert('Error de red.');
