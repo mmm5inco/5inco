@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PreApproval } from 'mercadopago';
+import { PreApproval, MercadoPagoConfig } from 'mercadopago';
 import { createClient } from '@/utils/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Inicializar MercadoPago con el token del CEO
-    const client = new (require('mercadopago').MercadoPagoConfig)({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN });
+    const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || '' });
     const preApproval = new PreApproval(client);
 
     // 3. Crear el plan de suscripción (PreApproval)
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
       back_url: `${baseUrl}/${slug}/admin`, // A dónde vuelve después de pagar
       reason: 'Suscripción Mensual - 5inco SaaS',
       external_reference: localId, // Identificador de nuestro supermercado
+      payer_email: user.email, // REQUERIDO POR MERCADOPAGO
       auto_recurring: {
         frequency: 1,
         frequency_type: 'months',
