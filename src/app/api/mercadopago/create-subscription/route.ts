@@ -1,22 +1,22 @@
 import { NextResponse } from 'next/server';
 import { PreApproval } from 'mercadopago';
-import { cookies } from 'next/headers';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-// Inicializar Supabase Server Client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Inicializar Supabase Admin para actualizar la DB (Service Role)
+const supabaseAdminUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAdminKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseAdmin = createSupabaseClient(supabaseAdminUrl, supabaseAdminKey);
 
 export async function POST(request: Request) {
   try {
     const { localId, slug } = await request.json();
 
-    // 1. Verificación básica de seguridad (que el admin esté logueado en ese slug)
-    const cookieStore = await cookies();
-    const token = cookieStore.get(`admin_auth_${slug}`);
+    // 1. Verificación básica de seguridad con Supabase Auth
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
     
-    if (!token || token.value !== 'authenticated') {
+    if (!user) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
     // Guardar temporalmente el ID de la pre-aprobación generada en la BD (opcional)
     if (response.id) {
-      await supabase
+      await supabaseAdmin
         .from('locales')
         .update({ mp_subscription_id: response.id })
         .eq('id', localId);
