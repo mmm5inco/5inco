@@ -157,7 +157,7 @@ export default function CEODashboard() {
                   </span>
                 </td>
                 <td style={{ padding: '16px', color: '#94a3b8' }}>
-                  {local.fin_prueba_en ? new Date(local.fin_prueba_en).toLocaleDateString() : 'N/A'}
+                  {local.fin_prueba_en ? new Date(local.fin_prueba_en).toLocaleDateString() : (local.creado_en ? new Date(new Date(local.creado_en).getTime() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString() : 'N/A')}
                 </td>
                 <td style={{ padding: '16px' }}>
                   <button 

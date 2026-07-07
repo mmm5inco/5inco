@@ -10,20 +10,48 @@ const WhatsAppConnection = ({ slug }: { slug: string }) => {
   const [qr, setQr] = useState('');
 
   useEffect(() => {
+    const supabase = createClient();
+    let isMounted = true;
+    
     const fetchStatus = async () => {
       try {
-        const res = await fetch(`http://${window.location.hostname}:3333/api/whatsapp/status?slug=${slug}`);
-        const data = await res.json();
-        setStatus(data.status);
-        setQr(data.qr);
+        const { data, error } = await supabase.from('whatsapp_sesiones').select('status, qr_code').eq('slug', slug).single();
+        if (error) {
+          if (isMounted) setStatus('error');
+          return;
+        }
+        if (data && isMounted) {
+          setStatus(data.status);
+          setQr(data.qr_code);
+        }
       } catch (err) {
-        setStatus('error');
+        if (isMounted) setStatus('error');
       }
     };
+
     fetchStatus();
-    const interval = setInterval(fetchStatus, 3000);
-    return () => clearInterval(interval);
-  }, []);
+
+    // Suscribirse a cambios en tiempo real para no tener que hacer polling
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'whatsapp_sesiones', filter: `slug=eq.${slug}` },
+        (payload) => {
+          if (isMounted) {
+            const newData = payload.new as any;
+            setStatus(newData.status);
+            setQr(newData.qr_code);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      isMounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, [slug]);
 
   if (status === 'error') {
     return (
@@ -123,7 +151,7 @@ export default function AdminDashboard() {
       // Obtener configuracion y ID del local
       const { data: localData } = await supabase
         .from('locales')
-        .select('id, configuracion, estado_suscripcion, fin_prueba_en')
+        .select('id, configuracion, estado_suscripcion, fin_prueba_en, creado_en')
         .eq('slug', slug)
         .single();
       
@@ -137,7 +165,9 @@ export default function AdminDashboard() {
         if (localData.fin_prueba_en) {
           setFinPrueba(new Date(localData.fin_prueba_en));
         } else {
-          const defaultFinPrueba = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+          // Si no tiene fin_prueba_en (negocios nuevos), calculamos 14 días desde creado_en
+          const fechaCreacion = localData.creado_en ? new Date(localData.creado_en) : new Date();
+          const defaultFinPrueba = new Date(fechaCreacion.getTime() + 14 * 24 * 60 * 60 * 1000);
           setFinPrueba(defaultFinPrueba);
         }
 
