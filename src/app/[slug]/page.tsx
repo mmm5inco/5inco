@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 import PoweredByFooter from '@/components/PoweredByFooter';
+import InstallPWA from '@/components/InstallPWA';
 
 export default function LandingLocal() {
   const params = useParams();
@@ -738,6 +739,9 @@ export default function LandingLocal() {
           </div>
         </div>
       )}
+      
+      {/* Botón Flotante para instalar PWA */}
+      <InstallPWA />
     </div>
   );
 }
