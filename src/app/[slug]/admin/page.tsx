@@ -481,16 +481,16 @@ export default function AdminDashboard() {
           <>
             <p style={{ color: 'var(--text-muted)' }}>Tu supermercado está protegido y con acceso total al sistema 5inco. El cobro se realiza mensualmente.</p>
             <button onClick={() => setShowCancelModal(true)} style={{ background: 'transparent', color: '#ef4444', border: '1px solid #ef4444', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', width: 'fit-content', fontSize: '0.9rem' }}>
-              Dar de baja suscripción
+              Eliminar suscripción
             </button>
             
             {showCancelModal && (
               <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px', border: '1px dashed #ef4444' }}>
                 <h4 style={{ color: '#ef4444', margin: '0 0 8px 0' }}>¿Estás absolutamente seguro?</h4>
-                <p style={{ color: 'var(--text-primary)', fontSize: '0.9rem', margin: '0 0 16px 0' }}>Al dar de baja la suscripción, tus cajeros no podrán llamar clientes y las pantallas dejarán de funcionar al final de tu ciclo de facturación.</p>
+                <p style={{ color: 'var(--text-primary)', fontSize: '0.9rem', margin: '0 0 16px 0' }}>Al eliminar la suscripción, tus cajeros no podrán llamar clientes y las pantallas dejarán de funcionar al final de tu ciclo de facturación.</p>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button onClick={() => setShowCancelModal(false)} style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '8px 16px', borderRadius: '6px', border: '1px solid var(--border-glass)', cursor: 'pointer' }}>Cancelar</button>
-                  <button onClick={handleCancelSubscription} style={{ background: '#ef4444', color: '#fff', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>Sí, Dar de Baja</button>
+                  <button onClick={handleCancelSubscription} style={{ background: '#ef4444', color: '#fff', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>Sí, Eliminar</button>
                 </div>
               </div>
             )}
