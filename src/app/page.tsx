@@ -5,11 +5,19 @@ export default function Home() {
     <div className="flex-col gap-xl" style={{ minHeight: 'calc(100vh - 48px)', justifyContent: 'center' }}>
       
       {/* Header */}
-      <div className="flex-col gap-sm" style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '3rem' }}>
-          5<span className="text-gradient">inco</span>
-        </h1>
-        <p className="text-muted" style={{ fontSize: '1.1rem' }}>
+      <div className="flex-col gap-sm" style={{ textAlign: 'center', alignItems: 'center' }}>
+        <img 
+          src="/logo-5inco.png" 
+          alt="5inco Logo" 
+          style={{ 
+            width: '200px', 
+            height: 'auto', 
+            borderRadius: '16px', 
+            boxShadow: '0 0 25px rgba(214, 171, 85, 0.15)',
+            border: '1px solid rgba(214, 171, 85, 0.1)'
+          }} 
+        />
+        <p className="text-muted" style={{ fontSize: '1.1rem', marginTop: '8px' }}>
           El fin de las filas físicas
         </p>
       </div>
@@ -36,16 +44,22 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="glass-card flex-col gap-sm">
-          <div className="flex-between">
-            <span style={{ fontSize: '2rem' }}>🛒</span>
-            <span style={{ fontWeight: 600 }}>Para Clientes</span>
-          </div>
-          <h3>Demo Cliente</h3>
+        <div className="glass-card flex-col gap-sm" style={{ alignItems: 'center', textAlign: 'center' }}>
+          <img 
+            src="/logo-5inco.png" 
+            alt="5inco Logo Cliente" 
+            style={{ 
+              width: '100px', 
+              height: 'auto', 
+              borderRadius: '8px',
+              border: '1px solid rgba(214, 171, 85, 0.1)'
+            }} 
+          />
+          <h3 style={{ margin: '8px 0 4px 0' }}>El fin de la fila física</h3>
           <p className="text-muted" style={{ fontSize: '0.9rem' }}>
             Escanea un QR para pedir turno en un local y sigue comprando.
           </p>
-          <a href="/demo-local" className="btn-secondary" style={{ marginTop: '8px' }}>
+          <a href="/demo-local" className="btn-secondary" style={{ marginTop: '8px', width: '100%' }}>
             Ver Vista Cliente
           </a>
         </div>
