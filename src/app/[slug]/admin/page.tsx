@@ -116,6 +116,9 @@ export default function AdminDashboard() {
   const [logo, setLogo] = useState('/logo.png');
   const [brandColor, setBrandColor] = useState('#38bdf8');
   const [theme, setTheme] = useState('oscuro');
+  const [nombreLocal, setNombreLocal] = useState('');
+  const [isEditingNombre, setIsEditingNombre] = useState(false);
+  const [mpEmail, setMpEmail] = useState('');
   
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -153,12 +156,13 @@ export default function AdminDashboard() {
       // Obtener configuracion y ID del local
       const { data: localData } = await supabase
         .from('locales')
-        .select('id, configuracion, estado_suscripcion, fin_prueba_en, creado_en')
+        .select('id, nombre, configuracion, estado_suscripcion, fin_prueba_en, creado_en')
         .eq('slug', slug)
         .single();
       
       if (localData) {
         setLocalId(localData.id);
+        if (localData.nombre) setNombreLocal(localData.nombre);
         
         if (localData.estado_suscripcion === 'vencida') {
            setIsExpired(true);
@@ -222,6 +226,20 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateNombreLocal = async () => {
+    if (!localId || !nombreLocal.trim()) return;
+    const { error } = await supabase
+      .from('locales')
+      .update({ nombre: nombreLocal.trim() })
+      .eq('id', localId);
+
+    if (error) {
+      alert('Error al actualizar el nombre del local');
+    } else {
+      setIsEditingNombre(false);
+    }
+  };
+
   const getContrast = (hex: string) => {
     const cleanHex = hex.replace('#', '');
     const r = parseInt(cleanHex.substr(0, 2), 16);
@@ -243,7 +261,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/mercadopago/create-subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ localId, slug })
+        body: JSON.stringify({ localId, slug, mpEmail })
       });
       const data = await res.json();
       if (data.init_point) {
@@ -435,6 +453,16 @@ export default function AdminDashboard() {
           Tu período de prueba o suscripción ha finalizado. Para seguir utilizando 5inco y no interrumpir el servicio a tus clientes, por favor renueva tu suscripción.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', marginTop: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '400px', width: '100%', marginBottom: '16px' }}>
+            <label style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>Correo de tu cuenta de Mercado Pago (Opcional):</label>
+            <input 
+              type="email" 
+              value={mpEmail} 
+              onChange={(e) => setMpEmail(e.target.value)} 
+              placeholder="ejemplo@mercadopago.com" 
+              style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-glass)', color: 'var(--text-primary)', padding: '10px', borderRadius: '8px' }}
+            />
+          </div>
           <label style={{ fontSize: '0.9rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={acceptedTerms} onChange={e => setAcceptedTerms(e.target.checked)} style={{ marginRight: '8px' }}/>
             Acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#009ee3' }}>Términos y Condiciones</a> del servicio SaaS.
@@ -468,6 +496,16 @@ export default function AdminDashboard() {
               Te quedan <strong>{diasRestantesPrueba > 0 ? diasRestantesPrueba : 0} días</strong> de prueba gratuita. Ingresa una tarjeta para asegurar que tus cajeros no pierdan acceso.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '400px', width: '100%' }}>
+                <label style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>Correo de tu cuenta de Mercado Pago (Opcional):</label>
+                <input 
+                  type="email" 
+                  value={mpEmail} 
+                  onChange={(e) => setMpEmail(e.target.value)} 
+                  placeholder="ejemplo@mercadopago.com" 
+                  style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', color: 'var(--text-primary)', padding: '10px', borderRadius: '8px' }}
+                />
+              </div>
               <label style={{ fontSize: '0.9rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <input type="checkbox" checked={acceptedTerms} onChange={e => setAcceptedTerms(e.target.checked)} style={{ marginRight: '8px' }}/>
                 Acepto los <a href="/terminos" target="_blank" rel="noopener noreferrer" style={{ color: '#009ee3' }}>Términos y Condiciones</a>
@@ -640,9 +678,33 @@ export default function AdminDashboard() {
       {/* Sección: Personalización VISUAL */}
       <section className="flex-col gap-sm" style={{ padding: '24px', background: 'var(--bg-secondary)', borderRadius: 'var(--border-radius-md)', border: `2px solid var(--accent-primary)` }}>
         <div className="flex-between">
-          <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>Personalización de la Landing Page</h3>
-          <span style={{ fontSize: '2rem' }}>🎨</span>
+          <h2 style={{ marginBottom: '16px', color: 'var(--text-primary)' }}>Personalización de Landing Page</h2>
         </div>
+        
+        <div style={{ marginBottom: '24px', background: 'var(--bg-secondary)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-glass)' }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '1.1rem', color: 'var(--text-primary)' }}>Nombre de tu Local</h3>
+          {isEditingNombre ? (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input 
+                type="text" 
+                value={nombreLocal} 
+                onChange={(e) => setNombreLocal(e.target.value)}
+                style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '6px' }}
+              />
+              <button onClick={handleUpdateNombreLocal} style={{ background: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>Guardar</button>
+              <button onClick={() => setIsEditingNombre(false)} style={{ background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--border-glass)', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>Cancelar</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>{nombreLocal}</span>
+              <button onClick={() => setIsEditingNombre(true)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center' }} title="Editar nombre del local">
+                ✏️
+              </button>
+            </div>
+          )}
+          <p style={{ margin: '8px 0 0 0', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Este es el nombre que verán tus clientes en la página de turnos.</p>
+        </div>
+        
         <p style={{ color: 'var(--text-muted)' }}>Los cambios que hagas aquí afectarán los colores y formas de tu página pública (lo que ve el cliente).</p>
         
         <div className="flex-col gap-sm" style={{ padding: '16px', background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--border-glass)' }}>

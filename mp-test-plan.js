@@ -12,7 +12,8 @@ async function test() {
     },
     back_url: 'https://5inco.com.ar/test/admin',
     external_reference: 'test-local-id',
-    notification_url: 'https://5inco.com.ar/api/mercadopago/webhook'
+    notification_url: 'https://5inco.com.ar/api/mercadopago/webhook',
+    payer_email: 'test@mercadopago.com'
   };
 
   const response = await fetch(url, {
