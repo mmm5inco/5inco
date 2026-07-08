@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import AgencyFooter from '@/components/AgencyFooter';
 
 export default function RegistroNegocio() {
   const router = useRouter();
@@ -152,6 +153,7 @@ export default function RegistroNegocio() {
           ¿Ya tienes cuenta? <a href="/login-negocio" className="text-accent">Inicia Sesión</a>
         </p>
       </div>
+      <AgencyFooter />
     </div>
   );
 }

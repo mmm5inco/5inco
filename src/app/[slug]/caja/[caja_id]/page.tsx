@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import PoweredByFooter from '@/components/PoweredByFooter';
+import AgencyFooter from '@/components/AgencyFooter';
 
 export default function LoginCajero() {
   const params = useParams();
@@ -554,7 +554,7 @@ export default function LoginCajero() {
           </div>
         </section>
 
-        <PoweredByFooter />
+        <AgencyFooter />
       </div>
     );
   }

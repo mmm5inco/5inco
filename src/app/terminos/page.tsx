@@ -1,4 +1,5 @@
 import React from 'react';
+import AgencyFooter from '@/components/AgencyFooter';
 
 export default function TerminosPage() {
   return (
@@ -99,6 +100,7 @@ export default function TerminosPage() {
           ← Volver al Inicio
         </a>
       </div>
+      <AgencyFooter />
     </div>
   );
 }

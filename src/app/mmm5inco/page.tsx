@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import PoweredByFooter from '@/components/PoweredByFooter';
+import AgencyFooter from '@/components/AgencyFooter';
 
 export default function CEODashboard() {
   const supabase = createClient();
@@ -180,7 +180,7 @@ export default function CEODashboard() {
         </table>
       </div>
 
-      <PoweredByFooter />
+      <AgencyFooter />
     </div>
   );
 }

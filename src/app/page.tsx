@@ -1,3 +1,5 @@
+import AgencyFooter from '@/components/AgencyFooter';
+
 export default function Home() {
   return (
     <div className="flex-col gap-xl" style={{ minHeight: 'calc(100vh - 48px)', justifyContent: 'center' }}>
@@ -55,6 +57,7 @@ export default function Home() {
           Plataforma de Turnos Inteligentes
         </p>
       </div>
+      <AgencyFooter />
     </div>
   );
 }
