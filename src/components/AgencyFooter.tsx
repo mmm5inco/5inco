@@ -5,16 +5,16 @@ export default function AgencyFooter() {
     <footer style={{
       marginTop: '60px',
       padding: '40px 20px',
-      borderTop: '1px solid var(--border-glass)',
+      borderTop: '1px solid rgba(214, 171, 85, 0.15)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       gap: '16px',
-      background: 'rgba(0,0,0,0.2)',
+      background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(214, 171, 85, 0.03) 100%)',
     }}>
       <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '16px' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '12px', letterSpacing: '1px', textTransform: 'uppercase' }}>
           Potenciado por
         </p>
         
@@ -24,36 +24,38 @@ export default function AgencyFooter() {
           rel="noopener noreferrer"
           className="agency-logo-container"
           style={{
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             textDecoration: 'none',
-            padding: '16px',
-            borderRadius: '12px',
+            padding: '20px 24px',
+            borderRadius: '16px',
             transition: 'all 0.3s ease',
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid transparent',
+            background: 'rgba(0, 0, 0, 0.4)',
+            border: '1px solid rgba(214, 171, 85, 0.1)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
           }}
         >
-          {/* Usamos un texto grande como placeholder hasta que se suba el logo real */}
-          <h2 
+          <img 
+            src="/logo-mmm.png" 
+            alt="Todo lo que quiero Logo" 
             style={{ 
-              fontSize: '1.8rem', 
-              fontWeight: '900', 
-              margin: '0 0 8px 0',
-              background: 'linear-gradient(45deg, #38bdf8, #818cf8)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textAlign: 'center',
-              lineHeight: 1.2
-            }}
-          >
-            Todo lo que quiero
-          </h2>
+              width: '140px', 
+              height: 'auto',
+              borderRadius: '8px',
+              border: '1px solid rgba(214, 171, 85, 0.15)',
+              marginBottom: '12px',
+              transition: 'all 0.3s ease'
+            }} 
+          />
+          
           <p style={{ 
             fontSize: '0.85rem', 
-            color: '#a1a1aa', 
+            color: '#d6ab55', 
             margin: 0,
-            fontWeight: '500',
-            textAlign: 'center'
+            fontWeight: '600',
+            textAlign: 'center',
+            letterSpacing: '0.5px'
           }}>
             Creamos soluciones tecnológicas para los negocios
           </p>
@@ -62,10 +64,14 @@ export default function AgencyFooter() {
 
       <style jsx>{`
         .agency-logo-container:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 0 20px rgba(56, 189, 248, 0.4), 0 0 40px rgba(129, 140, 248, 0.2);
-          border: 1px solid rgba(56, 189, 248, 0.3) !important;
-          background: rgba(255,255,255,0.05) !important;
+          transform: translateY(-3px);
+          box-shadow: 0 0 25px rgba(214, 171, 85, 0.3), 0 0 50px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(214, 171, 85, 0.4) !important;
+          background: rgba(15, 15, 15, 0.8) !important;
+        }
+        .agency-logo-container:hover img {
+          border-color: rgba(214, 171, 85, 0.4);
+          transform: scale(1.02);
         }
       `}</style>
     </footer>

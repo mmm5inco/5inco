@@ -41,30 +41,29 @@ export default function SplashScreen() {
         color: '#ffffff',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-        {/* Usamos un texto grande como placeholder hasta que se suba el logo real */}
-        <h1 
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+        <img 
+          src="/logo-mmm.png" 
+          alt="Todo lo que quiero Logo" 
           style={{ 
-            fontSize: '3rem', 
-            fontWeight: '900', 
-            margin: 0,
-            background: 'linear-gradient(45deg, #38bdf8, #818cf8)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            textAlign: 'center',
-            lineHeight: 1.1
-          }}
-        >
-          Todo lo que quiero
-        </h1>
+            width: '240px', 
+            height: 'auto',
+            borderRadius: '16px',
+            boxShadow: '0 0 35px rgba(214, 171, 85, 0.25)',
+            border: '2px solid rgba(214, 171, 85, 0.3)',
+            animation: 'logoPulse 2s infinite ease-in-out'
+          }} 
+        />
         
         <p style={{ 
           fontSize: '1.2rem', 
-          color: '#a1a1aa', 
+          color: '#d6ab55', 
           margin: 0,
-          fontWeight: '500',
+          fontWeight: '600',
           textAlign: 'center',
-          maxWidth: '80%'
+          maxWidth: '80%',
+          letterSpacing: '1px',
+          textShadow: '0 2px 10px rgba(0,0,0,0.5)'
         }}>
           Creamos soluciones tecnológicas para los negocios
         </p>
@@ -73,6 +72,20 @@ export default function SplashScreen() {
       <style jsx global>{`
         body {
           overflow: ${isVisible ? 'hidden' : 'auto'};
+        }
+        @keyframes logoPulse {
+          0% {
+            transform: scale(1);
+            box-shadow: 0 0 35px rgba(214, 171, 85, 0.25);
+          }
+          50% {
+            transform: scale(1.03);
+            box-shadow: 0 0 50px rgba(214, 171, 85, 0.45);
+          }
+          100% {
+            transform: scale(1);
+            box-shadow: 0 0 35px rgba(214, 171, 85, 0.25);
+          }
         }
       `}</style>
     </div>
