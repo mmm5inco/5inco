@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
-import PoweredByFooter from '@/components/PoweredByFooter';
+import AgencyFooter from '@/components/AgencyFooter';
 import InstallPWA from '@/components/InstallPWA';
 
 export default function LandingLocal() {
@@ -664,7 +664,7 @@ export default function LandingLocal() {
           </div>
         )}
 
-        <PoweredByFooter />
+        <AgencyFooter />
       </div>
 
       {/* MODAL DE REGISTRO (NOMBRE Y WHATSAPP) */}

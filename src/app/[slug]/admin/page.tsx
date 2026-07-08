@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import AgencyFooter from '@/components/AgencyFooter';
 
 const WhatsAppConnection = ({ slug }: { slug: string }) => {
   const [status, setStatus] = useState('disconnected');
@@ -847,7 +848,8 @@ export default function AdminDashboard() {
         </div>
 
       </section>
-      
+
+      <AgencyFooter />
     </div>
   );
 }
