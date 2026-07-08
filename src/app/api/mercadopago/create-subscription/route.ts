@@ -10,7 +10,7 @@ const supabaseAdmin = createSupabaseClient(supabaseAdminUrl, supabaseAdminKey);
 
 export async function POST(request: Request) {
   try {
-    const { localId, slug } = await request.json();
+    const { localId, slug, mpEmail } = await request.json();
 
     // 1. Verificación básica de seguridad con Supabase Auth
     const supabase = await createClient();
@@ -57,7 +57,14 @@ export async function POST(request: Request) {
     }
 
     // Retornamos el init_point (La URL de pago de MercadoPago)
-    return NextResponse.json({ init_point: response.init_point });
+    // Añadimos el email a la URL si lo enviaron, para ayudar al sistema antifraude de MP
+    let finalInitPoint = response.init_point;
+    if (finalInitPoint && mpEmail) {
+      const separator = finalInitPoint.includes('?') ? '&' : '?';
+      finalInitPoint += `${separator}payer_email=${encodeURIComponent(mpEmail)}`;
+    }
+
+    return NextResponse.json({ init_point: finalInitPoint });
 
   } catch (error: any) {
     console.error('Error generando link de MercadoPago:', error);
